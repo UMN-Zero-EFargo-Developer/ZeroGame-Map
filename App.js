@@ -38,6 +38,7 @@ class App extends Component{
 
     AsyncStorage.clear(); //disable if want to store data locally
 
+    //pan responder used for the draggable point 
     this.panResponder1 = PanResponder.create({    //Step 2
         onStartShouldSetPanResponder : () => true,
         onPanResponderMove           : Animated.event([null,{ //Step 3
@@ -79,12 +80,14 @@ class App extends Component{
     });
   }
   
+  //set current draggable value
   setDropZoneValues(event){      //Step 1
     this.setState({
         dropZoneValues : event.nativeEvent.layout
     });
   }
 
+  //check if draggable can be drop at current point
   isDropZone(gesture){
     var dz = this.state.dropZoneValues;
     var first = gesture.moveY > dz.y && gesture.moveY < dz.y + dz.height;
@@ -92,6 +95,7 @@ class App extends Component{
     return (first && second);
   }
 
+  //store data at cache storage
   _storeData = async (a,b) => {
     try {
         stringifiedArray = JSON.stringify(b)
@@ -101,6 +105,7 @@ class App extends Component{
     }
   }
 
+  //retrive data from cache storage
   _retrieveData = async (a) => {
     try {
         const value = await AsyncStorage.getItem(a);
@@ -146,10 +151,12 @@ class App extends Component{
     })
   }
 
+  //get total data in storage
   async getTotal() {
     return (await AsyncStorage.getAllKeys()).length;
   }
 
+  //get all keys of storage
   async getKeys() {
     return await AsyncStorage.getAllKeys()
   }
@@ -180,6 +187,7 @@ class App extends Component{
     );
   }
 
+  //draggable point view
   renderDraggable(){
     if(this.state.inRange){
       return (
@@ -219,6 +227,7 @@ class App extends Component{
     
   }
   
+  //render map 
   renderMapView() {
     markers = []
     arr = this.state.arr;
